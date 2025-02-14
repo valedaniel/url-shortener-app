@@ -2,6 +2,7 @@ import { AppService } from '@app/app.service';
 import { JwtAuthGuard } from '@app/guards/jwt.auth.guard';
 import { JwtStrategy } from '@app/guards/jwt.strategy';
 import { LoggingInterceptor } from '@app/interceptors/logging.interceptor';
+import { AuthModule } from '@app/resources/routes/auth/auth.module';
 import { UserModule } from '@app/resources/routes/user/user.module';
 import { ApplicationEnv } from '@app/utils/application-settings';
 import { Module } from '@nestjs/common';
@@ -13,7 +14,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Dialect } from 'sequelize';
 import { AppController } from './app.controller';
 
-const modules = [UserModule];
+const modules = [UserModule, AuthModule];
 
 const controllers = [AppController];
 
