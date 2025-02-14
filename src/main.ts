@@ -1,12 +1,12 @@
 import { Logger, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
+import { ApplicationEnv } from '@app/utils/application-settings';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  const port = process.env.PORT || 5000;
+  const port = ApplicationEnv.PORT;
 
   app.enableCors({
     origin: '*',
@@ -15,14 +15,12 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.enableVersioning({
     type: VersioningType.URI,
-    defaultVersion: process.env.API_VERSION,
+    defaultVersion: ApplicationEnv.API_VERSION,
   });
 
   await app.listen(port, () => {
     Logger.log(`Server listening in port: ${port}`);
-    Logger.log(
-      `Server running in ${process.env.NODE_ENV || 'unknown'} environment.`,
-    );
+    Logger.log(`Server running in ${ApplicationEnv.NODE_ENV} environment.`);
   });
 }
 
