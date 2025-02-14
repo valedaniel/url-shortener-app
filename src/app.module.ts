@@ -2,6 +2,7 @@ import { AppService } from '@app/app.service';
 import { JwtAuthGuard } from '@app/guards/jwt.auth.guard';
 import { JwtStrategy } from '@app/guards/jwt.strategy';
 import { LoggingInterceptor } from '@app/interceptors/logging.interceptor';
+import { UserModule } from '@app/resources/routes/user/user.module';
 import { ApplicationEnv } from '@app/utils/application-settings';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -11,6 +12,10 @@ import { AuthModuleOptions } from '@nestjs/passport';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Dialect } from 'sequelize';
 import { AppController } from './app.controller';
+
+const modules = [UserModule];
+
+const controllers = [AppController];
 
 @Module({
   imports: [
@@ -34,8 +39,9 @@ import { AppController } from './app.controller';
         decimalNumbers: true,
       },
     }),
+    ...modules,
   ],
-  controllers: [AppController],
+  controllers,
   providers: [
     AppService,
     JwtStrategy,
