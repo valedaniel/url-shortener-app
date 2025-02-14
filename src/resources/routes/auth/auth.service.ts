@@ -3,6 +3,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { TokenService } from '@app/resources/private/token/token.service';
+import { LoginUserDto } from '@app/resources/routes/auth/dtos/login.user.dto';
 import User from '@app/resources/routes/user/entities/user.entity';
 import { Payload } from '@app/types/payload';
 import { InjectModel } from '@nestjs/sequelize';
@@ -11,11 +12,10 @@ import { InjectModel } from '@nestjs/sequelize';
 export class AuthService {
   constructor(
     private readonly tokenService: TokenService,
-
     @InjectModel(User) private readonly userRepository: typeof User,
   ) {}
 
-  async login(login: { email: string; password: string }) {
+  async login(login: LoginUserDto) {
     const { email, password } = login;
 
     const error = new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);

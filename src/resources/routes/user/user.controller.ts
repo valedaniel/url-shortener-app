@@ -1,4 +1,4 @@
-import User from '@app/resources/routes/user/entities/user.entity';
+import { CreateUserDto } from '@app/resources/routes/user/dtos/create.user.dto';
 import { UserService } from '@app/resources/routes/user/user.service';
 import { Public } from '@app/utils/decorators';
 import { Body, Controller, Post } from '@nestjs/common';
@@ -9,7 +9,7 @@ export class UserController {
 
   @Post()
   @Public()
-  create(@Body() user: User) {
+  create(@Body() user: CreateUserDto) {
     return this.service.create(user);
   }
 }

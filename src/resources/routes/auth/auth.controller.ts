@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post, Req } from '@nestjs/common';
 
 import { Request } from 'express';
 
+import { LoginUserDto } from '@app/resources/routes/auth/dtos/login.user.dto';
 import { Payload } from '@app/types/payload';
 import { Public } from '@app/utils/decorators';
 import { AuthService } from './auth.service';
@@ -12,7 +13,7 @@ export class AuthController {
 
   @Public()
   @Post('login')
-  login(@Body() login: { email: string; password: string }) {
+  login(@Body() login: LoginUserDto) {
     return this.authService.login(login);
   }
 

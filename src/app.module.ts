@@ -23,7 +23,7 @@ const controllers = [AppController];
     ConfigModule.forRoot(),
     AuthModuleOptions,
     JwtModule.register({
-      secret: process.env.JWT_SECRET,
+      secret: ApplicationEnv.JWT_SECRET,
       global: true,
     }),
     SequelizeModule.forRoot({
