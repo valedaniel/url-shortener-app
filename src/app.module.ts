@@ -1,8 +1,8 @@
-import { AppService } from '@app/app.service';
 import { JwtAuthGuard } from '@app/guards/jwt.auth.guard';
 import { JwtStrategy } from '@app/guards/jwt.strategy';
 import { LoggingInterceptor } from '@app/interceptors/logging.interceptor';
 import { AuthModule } from '@app/resources/routes/auth/auth.module';
+import { ClickModule } from '@app/resources/routes/clicks/click.module';
 import { UrlModule } from '@app/resources/routes/urls/url.module';
 import { UserModule } from '@app/resources/routes/user/user.module';
 import { ApplicationEnv } from '@app/utils/application-settings';
@@ -14,7 +14,7 @@ import { AuthModuleOptions } from '@nestjs/passport';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Dialect } from 'sequelize';
 
-const modules = [UserModule, AuthModule, UrlModule];
+const modules = [UserModule, AuthModule, UrlModule, ClickModule];
 
 @Module({
   imports: [
@@ -41,7 +41,6 @@ const modules = [UserModule, AuthModule, UrlModule];
     ...modules,
   ],
   providers: [
-    AppService,
     JwtStrategy,
     {
       provide: APP_INTERCEPTOR,
