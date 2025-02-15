@@ -13,4 +13,6 @@ export const ApplicationEnv = {
   API_VERSION: process.env.API_VERSION || 'v1',
   NODE_ENV: process.env.NODE_ENV || 'development',
   JWT_SECRET: process.env.JWT_SECRET,
+  REDIS_HOST: process.env.REDIS_HOST || 'localhost',
+  REDIS_PORT: Number(process.env.REDIS_PORT) || 6379,
 };

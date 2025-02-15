@@ -1,3 +1,4 @@
+import { QueueModule } from '@app/queues/queue.module';
 import { ClickController } from '@app/resources/routes/clicks/click.controller';
 import { ClickService } from '@app/resources/routes/clicks/click.service';
 import Click from '@app/resources/routes/clicks/entities/click.entity';
@@ -11,7 +12,7 @@ const services = [ClickService];
 
 @Module({
   exports: services,
-  imports: [SequelizeModule.forFeature(entities), UrlModule],
+  imports: [SequelizeModule.forFeature(entities), UrlModule, QueueModule],
   controllers: [ClickController],
   providers: services,
 })
