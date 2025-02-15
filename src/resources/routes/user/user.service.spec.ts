@@ -4,7 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import User from './entities/user.entity';
 import { UserService } from './user.service';
 
-jest.mock('@app/utils/generateHash/generateHash');
+jest.mock('@app/utils/generateHash');
 
 describe('UserService', () => {
   let service: UserService;

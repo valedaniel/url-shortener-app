@@ -11,6 +11,10 @@ import * as crypto from 'crypto';
  * @returns A 6-character short code derived from the input URL.
  */
 export const generateShortCode = (url: string): string => {
+  if (!url) {
+    throw new Error('Invalid URL.');
+  }
+
   return crypto
     .createHash('sha256')
     .update(url)

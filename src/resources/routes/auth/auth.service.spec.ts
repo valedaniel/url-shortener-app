@@ -39,6 +39,10 @@ describe('AuthService', () => {
     userRepository = module.get<typeof User>(getModelToken(User));
   });
 
+  it('should be defined', () => {
+    expect(authService).toBeDefined();
+  });
+
   describe('login', () => {
     it('should throw an error if user is not found', async () => {
       jest.spyOn(userRepository, 'findOne').mockResolvedValue(null);

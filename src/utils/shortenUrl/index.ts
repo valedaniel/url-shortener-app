@@ -12,7 +12,7 @@ export const shortenUrl = (
   originalUrl: string,
   baseDomain: string = DEFAULT_BASE_DOMAIN,
 ): string => {
-  if (!validator.isURL(originalUrl, { require_protocol: true })) {
+  if (!validator.isURL(originalUrl)) {
     throw new Error('Invalid URL.');
   }
 
