@@ -7,18 +7,34 @@ import { Payload } from '@app/types/payload';
 import { getFullDomain } from '@app/utils/getFullDomain';
 import { Request } from 'express';
 
+/**
+ * Service responsible for handling click events on shortened URLs.
+ */
 @Injectable()
 export class ClickService {
+  /**
+   * Constructs a new instance of the ClickService.
+   *
+   * @param clickRepository - The repository for managing Click entities.
+   * @param urlService - The service for handling URL-related operations.
+   */
   constructor(
     @InjectModel(Click)
     private readonly clickRepository: typeof Click,
     private readonly urlService: UrlService,
   ) {}
 
+  /**
+   * Handles a click event on a shortened URL.
+   *
+   * @param request - The HTTP request object.
+   * @param code - The shortened URL code.
+   * @param payload - Optional payload containing user information.
+   * @returns The original URL if found.
+   * @throws HttpException if the URL is not found.
+   */
   async clicking(request: Request, code: string, payload?: Payload) {
     const fullDomain = getFullDomain(request);
-
-    console.log(`${fullDomain}/${code}`);
 
     const url = await this.urlService.findByDomain(`${fullDomain}/${code}`);
 

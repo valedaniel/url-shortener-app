@@ -12,12 +12,30 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
+/**
+ * Controller for handling click events.
+ *
+ * @version VERSION_NEUTRAL
+ */
 @Controller({
   version: VERSION_NEUTRAL,
 })
 export class ClickController {
+  /**
+   * Creates an instance of ClickController.
+   *
+   * @param clickService - The service used to handle click events.
+   */
   constructor(private readonly clickService: ClickService) {}
 
+  /**
+   * Handles the click event for a given code.
+   *
+   * @param request - The incoming request object.
+   * @param response - The outgoing response object.
+   * @param code - The code associated with the URL to be redirected.
+   * @returns The original URL associated with the given code.
+   */
   @Get(':code')
   @Public()
   async clicking(
