@@ -6,6 +6,7 @@ import { Payload } from '@app/types/payload';
 import { Public } from '@app/utils/decorators';
 import {
   Body,
+  Controller,
   Delete,
   Get,
   Param,
@@ -18,9 +19,8 @@ import { Request } from 'express';
 
 /**
  * Controller for handling URL-related operations.
- *
- * @Controller('api/urls')
  */
+@Controller('api/urls')
 export class UrlController {
   /**
    * Constructs a new UrlController.
