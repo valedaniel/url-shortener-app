@@ -1,51 +1,40 @@
-import { DEFAULT_BASE_DOMAIN } from '@app/utils/constants';
 import { generateShortCode } from '@app/utils/generateShortCode';
+import { getFullDomain } from '@app/utils/getFullDomain';
+import { Request } from 'express';
 import validator from 'validator';
 import { shortenUrl } from './index';
 
 jest.mock('@app/utils/generateShortCode');
+jest.mock('@app/utils/getFullDomain');
 jest.mock('validator');
 
 describe('shortenUrl', () => {
-  const mockGenerateShortCode = generateShortCode as jest.Mock;
-  const mockIsURL = validator.isURL as jest.Mock;
+  let request: Request;
 
   beforeEach(() => {
-    jest.resetAllMocks();
+    request = {} as Request;
   });
 
-  it('should shorten a valid URL with the default base domain', () => {
+  it('should throw an error if the URL is invalid', () => {
+    (validator.isURL as jest.Mock).mockReturnValue(false);
+
+    expect(() => shortenUrl(request, 'invalid-url')).toThrow('Invalid URL.');
+  });
+
+  it('should return the shortened URL if the URL is valid', () => {
     const originalUrl = 'http://example.com';
-    const shortCode = 'mln542';
-    mockGenerateShortCode.mockReturnValue(shortCode);
-    mockIsURL.mockReturnValue(true);
+    const shortCode = 'abc123';
+    const fullDomain = 'http://localhost';
 
-    const result = shortenUrl(originalUrl);
+    (validator.isURL as jest.Mock).mockReturnValue(true);
+    (generateShortCode as jest.Mock).mockReturnValue(shortCode);
+    (getFullDomain as jest.Mock).mockReturnValue(fullDomain);
 
-    expect(result).toBe(`${DEFAULT_BASE_DOMAIN}/${shortCode}`);
-    expect(mockGenerateShortCode).toHaveBeenCalledWith(originalUrl);
-    expect(mockIsURL).toHaveBeenCalledWith(originalUrl);
-  });
+    const result = shortenUrl(request, originalUrl);
 
-  it('should shorten a valid URL with a custom base domain', () => {
-    const originalUrl = 'http://example.com';
-    const customBaseDomain = 'http://short.com';
-    const shortCode = 'mln542';
-    mockGenerateShortCode.mockReturnValue(shortCode);
-    mockIsURL.mockReturnValue(true);
-
-    const result = shortenUrl(originalUrl, customBaseDomain);
-
-    expect(result).toBe(`${customBaseDomain}/${shortCode}`);
-    expect(mockGenerateShortCode).toHaveBeenCalledWith(originalUrl);
-    expect(mockIsURL).toHaveBeenCalledWith(originalUrl);
-  });
-
-  it('should throw an error for an invalid URL', () => {
-    const invalidUrl = 'invalid-url';
-    mockIsURL.mockReturnValue(false);
-
-    expect(() => shortenUrl(invalidUrl)).toThrow('Invalid URL.');
-    expect(mockIsURL).toHaveBeenCalledWith(invalidUrl);
+    expect(result).toBe(`${fullDomain}/${shortCode}`);
+    expect(validator.isURL).toHaveBeenCalledWith(originalUrl);
+    expect(generateShortCode).toHaveBeenCalledWith(originalUrl);
+    expect(getFullDomain).toHaveBeenCalledWith(request);
   });
 });
