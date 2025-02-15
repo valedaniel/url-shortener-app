@@ -9,7 +9,7 @@ import validator from 'validator';
  * @param baseDomain The base domain of the shortener (default: "http://localhost")
  * @returns The shortened URL in the format "baseDomain/code"
  */
-export const shortenUrl = (request: Request, originalUrl: string): string => {
+export const shortenUrl = (request: Request, originalUrl: strin): string => {
   if (!validator.isURL(originalUrl)) {
     throw new Error('Invalid URL.');
   }
