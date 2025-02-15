@@ -1,4 +1,4 @@
-import { generateHash } from '@app/utils/generateHash/generateHash';
+import { generateHash } from '@app/utils/generateHash';
 import { getModelToken } from '@nestjs/sequelize';
 import { Test, TestingModule } from '@nestjs/testing';
 import User from './entities/user.entity';

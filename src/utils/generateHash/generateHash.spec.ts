@@ -1,4 +1,4 @@
-import { generateHash } from '@app/utils/generateHash/generateHash';
+import { generateHash } from '@app/utils/generateHash';
 import * as bcrypt from 'bcrypt';
 
 describe('generateHash', () => {

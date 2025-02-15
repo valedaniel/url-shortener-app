@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
 import { CreateUserDto } from '@app/resources/routes/user/dtos/create.user.dto';
-import { generateHash } from '@app/utils/generateHash/generateHash';
+import { generateHash } from '@app/utils/generateHash';
 import User from './entities/user.entity';
 
 /**

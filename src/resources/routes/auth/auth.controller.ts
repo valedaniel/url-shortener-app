@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+} from '@nestjs/common';
 
 import { Request } from 'express';
 
@@ -13,18 +21,19 @@ export class AuthController {
 
   @Public()
   @Post('login')
+  @HttpCode(HttpStatus.OK)
   login(@Body() login: LoginUserDto) {
     return this.authService.login(login);
   }
 
   @Get('refresh/token')
   refresh(@Req() request: Request) {
-    const user = request.user as Payload;
-    return this.authService.refreshToken(user);
+    const payload = request.user as Payload;
+    return this.authService.refreshToken(payload);
   }
 
   @Get('profile')
-  getProfile(@Req() req: Request) {
-    return req.user;
+  getProfile(@Req() request: Request) {
+    return request.user;
   }
 }
