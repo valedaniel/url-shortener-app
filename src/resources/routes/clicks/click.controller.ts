@@ -28,6 +28,12 @@ export class ClickController {
    */
   constructor(private readonly clickService: ClickService) {}
 
+  @Get()
+  @Public()
+  async welcome() {
+    return 'Welcome to the URL Shortener API - Developed by github.com/valedaniel';
+  }
+
   /**
    * Handles the click event for a given code.
    *
