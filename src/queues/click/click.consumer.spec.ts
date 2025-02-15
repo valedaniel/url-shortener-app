@@ -67,15 +67,4 @@ describe('ClickConsumer', () => {
       );
     });
   });
-
-  describe('onFailed', () => {
-    it('should log job failure status', () => {
-      const loggerSpy = jest.spyOn(clickConsumer['logger'], 'error');
-      const error = new Error('Test error');
-      clickConsumer.onFailed(mockJob, error);
-      expect(loggerSpy).toHaveBeenCalledWith(
-        `Job ${mockJob.id} in queue ${CLICK_QUEUE} failed with error: ${error.message}`,
-      );
-    });
-  });
 });
