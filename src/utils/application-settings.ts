@@ -1,7 +1,6 @@
 import * as dotenv from 'dotenv';
 
 dotenv.config();
-dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
 export const ApplicationEnv = {
   DATABASE_DIALECT: process.env.DATABASE_DIALECT,
