@@ -6,7 +6,7 @@ import Url from '@app/resources/routes/urls/entities/url.entity';
 import { Payload } from '@app/types/payload';
 import { shortenUrl } from '@app/utils/shortenUrl';
 import { Request } from 'express';
-import { Op, WhereOptions } from 'sequelize';
+import { Op, Sequelize, WhereOptions } from 'sequelize';
 
 /**
  * Service for managing URLs.
@@ -93,9 +93,42 @@ export class UrlService {
    * @param payload - The payload containing the owner's ID.
    * @returns A list of URLs.
    */
+  /**
+   * Retrieves a list of URLs associated with the given payload's owner ID.
+   *
+   * @param payload - The payload containing the owner ID.
+   * @returns A promise that resolves to an array of URLs with their details and total click count.
+   *
+   * The returned URL objects include the following attributes:
+   * - `id`: The unique identifier of the URL.
+   * - `originalUrl`: The original URL before shortening.
+   * - `urlShort`: The shortened URL.
+   * - `createdAt`: The timestamp when the URL was created.
+   * - `updatedAt`: The timestamp when the URL was last updated.
+   * - `totalClicks`: The total number of clicks the shortened URL has received.
+   *
+   * The URLs are filtered by the owner ID provided in the payload and grouped by their unique identifiers.
+   * The total click count is calculated using a SQL COUNT function on the associated clicks.
+   */
   async list(payload: Payload) {
     return this.urlRepository.findAll({
+      attributes: [
+        'id',
+        'originalUrl',
+        'urlShort',
+        'createdAt',
+        'updatedAt',
+        [
+          Sequelize.cast(
+            Sequelize.fn('COUNT', Sequelize.col('clicks.id')),
+            'integer',
+          ),
+          'totalClicks',
+        ],
+      ],
       where: { ownerId: payload.id },
+      include: [{ association: 'clicks', attributes: [] }],
+      group: ['urls.id'],
     });
   }
 

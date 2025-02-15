@@ -6,7 +6,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 /**
  * Controller for handling user-related operations.
  */
-@Controller('users')
+@Controller('api/users')
 export class UserController {
   /**
    * Creates an instance of UserController.

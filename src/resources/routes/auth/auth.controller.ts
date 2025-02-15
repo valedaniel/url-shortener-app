@@ -18,7 +18,7 @@ import { AuthService } from './auth.service';
 /**
  * Controller for authentication-related routes.
  */
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController {
   /**
    * Creates an instance of AuthController.

@@ -17,7 +17,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 
-@Controller('urls')
+@Controller('api/urls')
 export class UrlController {
   constructor(private readonly service: UrlService) {}
 

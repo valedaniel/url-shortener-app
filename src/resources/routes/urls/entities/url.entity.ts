@@ -1,3 +1,4 @@
+import Click from '@app/resources/routes/clicks/entities/click.entity';
 import User from '@app/resources/routes/user/entities/user.entity';
 import {
   AutoIncrement,
@@ -6,6 +7,7 @@ import {
   CreatedAt,
   DeletedAt,
   ForeignKey,
+  HasMany,
   Model,
   PrimaryKey,
   Table,
@@ -45,4 +47,7 @@ export default class Url extends Model {
 
   @BelongsTo(() => User, 'ownerId')
   owner?: User;
+
+  @HasMany(() => Click, 'urlId')
+  clicks?: Click[];
 }
