@@ -4,10 +4,9 @@ import {
   Injectable,
   Logger,
   NestInterceptor,
-} from "@nestjs/common";
-
-import { Observable } from "rxjs";
-import { tap } from "rxjs/operators";
+} from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
@@ -18,32 +17,38 @@ export class LoggingInterceptor implements NestInterceptor {
     const request = ctx.getRequest();
     const response = ctx.getResponse();
 
-    const { method, originalUrl, ip } = request;
+    const { method, originalUrl, ip, headers } = request;
+    const userAgent = headers['user-agent'] || 'Unknown';
+    const timestamp = new Date().toISOString();
 
     this.logger.log(
-      `[${new Date().toISOString()}] Request - ${method} ${originalUrl} from ${ip}`,
+      `Request [${timestamp}] ${method} ${originalUrl} - IP: ${ip} - User-Agent: ${userAgent}`,
     );
 
     const start = Date.now();
 
     return next.handle().pipe(
-      tap(() => {
-        const statusCode = response.statusCode;
+      tap({
+        next: () => {
+          const statusCode = response.statusCode;
+          const responseTime = Date.now() - start;
 
-        if (statusCode >= 0 && statusCode < 300) {
-          this.logger.log(
-            `[${new Date().toISOString()}] Response - ${method} ${originalUrl} ${statusCode}`,
-          );
-        } else {
+          const logMessage = `Response [${new Date().toISOString()}] ${method} ${originalUrl} - Status: ${statusCode} - Duration: ${responseTime}ms`;
+
+          if (statusCode >= 500) {
+            this.logger.error(logMessage);
+          } else if (statusCode >= 400) {
+            this.logger.warn(logMessage);
+          } else {
+            this.logger.log(logMessage);
+          }
+        },
+        error: (error) => {
+          const responseTime = Date.now() - start;
           this.logger.error(
-            `[${new Date().toISOString()}] Response - ${method} ${originalUrl} ${statusCode}`,
+            `Error [${new Date().toISOString()}] ${method} ${originalUrl} - ${error.message} - Duration: ${responseTime}ms`,
           );
-        }
-
-        const responseTimeMs = Date.now() - start;
-        this.logger.log(
-          `[${new Date().toISOString()}] Response Time - ${method} ${originalUrl}: ${responseTimeMs}ms`,
-        );
+        },
       }),
     );
   }
