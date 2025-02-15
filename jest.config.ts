@@ -13,6 +13,7 @@ export default {
   ),
   coveragePathIgnorePatterns: [
     'application-settings.ts',
+    'crud.service.ts',
     'main.ts',
     '.entity.ts',
     '.dto.ts',

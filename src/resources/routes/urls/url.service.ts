@@ -76,7 +76,9 @@ export class UrlService {
    * @returns The created URL.
    * @throws HttpException if the URL already exists.
    */
-  async create(request: Request, originalUrl: string, payload?: Payload) {
+  async create(request: Request, originalUrl: string) {
+    const payload = request?.user as Payload;
+
     await this.validateUrlDuplicated(originalUrl);
 
     const urlShort = shortenUrl(request, originalUrl);
@@ -147,12 +149,12 @@ export class UrlService {
 
     const urlShort = shortenUrl(request, originalUrl);
 
-    const rows = await this.urlRepository.update(
+    await this.urlRepository.update(
       { originalUrl, urlShort },
       { where: { id } },
     );
 
-    return rows[0] > 0;
+    return this.findByIdOrThrow(id);
   }
 
   /**
