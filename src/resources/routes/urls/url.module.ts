@@ -1,4 +1,4 @@
-import Url from '@app/resources/routes/urls/entities/url';
+import Url from '@app/resources/routes/urls/entities/url.entity';
 import { UrlController } from '@app/resources/routes/urls/url.controller';
 import { UrlService } from '@app/resources/routes/urls/url.service';
 import { Module } from '@nestjs/common';

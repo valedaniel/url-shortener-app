@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
-import Url from '@app/resources/routes/urls/entities/url';
+import Url from '@app/resources/routes/urls/entities/url.entity';
 import { Payload } from '@app/types/payload';
 import { shortenUrl } from '@app/utils/shortenUrl';
 

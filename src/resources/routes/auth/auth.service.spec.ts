@@ -72,10 +72,12 @@ describe('AuthService', () => {
         password: 'hashedPassword',
         toJSON: jest.fn().mockReturnValue({ email: 'test@example.com' }),
       };
+
       const tokens = {
         accessToken: 'accessToken',
         refreshToken: 'refreshToken',
       };
+
       jest
         .spyOn(userRepository, 'findOne')
         .mockResolvedValue(user as unknown as User);
@@ -102,6 +104,7 @@ describe('AuthService', () => {
         accessToken: 'accessToken',
         refreshToken: 'refreshToken',
       };
+
       jest.spyOn(tokenService, 'generateTokens').mockReturnValue(tokens);
 
       const result = await authService.refreshToken(payload);
