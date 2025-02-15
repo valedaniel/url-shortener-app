@@ -36,16 +36,13 @@ export default class Url extends Model {
   @Column({ field: 'original_url' })
   originalUrl: string;
 
-  @Column({ field: 'short_url' })
-  shortUrl: string;
-
-  @Column({ field: 'total_clicks' })
-  totalClicks: number;
+  @Column({ field: 'url_short' })
+  urlShort: string;
 
   @ForeignKey(() => User)
   @Column({ field: 'owner_id' })
-  ownerId: number;
+  ownerId?: number;
 
   @BelongsTo(() => User, 'ownerId')
-  owner: User;
+  owner?: User;
 }

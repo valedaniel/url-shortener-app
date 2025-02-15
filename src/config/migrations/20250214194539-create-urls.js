@@ -28,14 +28,9 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      short_url: {
+      url_short: {
         type: Sequelize.STRING,
         allowNull: false,
-      },
-      total_clicks: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        defaultValue: 0,
       },
       owner_id: {
         type: Sequelize.INTEGER,
