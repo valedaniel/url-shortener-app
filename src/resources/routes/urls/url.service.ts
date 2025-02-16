@@ -118,6 +118,7 @@ export class UrlService {
         'id',
         'originalUrl',
         'urlShort',
+        'ownerId',
         'createdAt',
         'updatedAt',
         [

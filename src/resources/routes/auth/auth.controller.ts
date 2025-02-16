@@ -3,6 +3,7 @@ import { LoginUserDto } from '@app/resources/routes/auth/dtos/login.user.dto';
 import { AuthResponse } from '@app/resources/routes/auth/types/auth.response';
 import { Error } from '@app/types/error';
 import { Payload } from '@app/types/payload';
+import { Unauthorized } from '@app/types/unauthorized';
 import { Public } from '@app/utils/decorators';
 import {
   Body,
@@ -76,8 +77,8 @@ export class AuthController {
   })
   @ApiResponse({
     status: 401,
-    description: 'Unauthorized',
-    type: Error,
+    description: 'Unauthorized.',
+    type: Unauthorized,
   })
   refresh(@Req() request: Request) {
     const payload = request.user as Payload;
@@ -99,8 +100,8 @@ export class AuthController {
   })
   @ApiResponse({
     status: 401,
-    description: 'Unauthorized',
-    type: Error,
+    description: 'Unauthorized.',
+    type: Unauthorized,
   })
   getProfile(@Req() request: Request) {
     return request.user as Payload;
