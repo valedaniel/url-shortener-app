@@ -37,9 +37,13 @@ export class UserService {
 
     const hashedPassword = generateHash(user.password);
 
-    return this.userRepository.create({
+    const userCreated = await this.userRepository.create({
       ...user,
       password: hashedPassword,
     });
+
+    const { password: _, ...userWithoutPassword } = userCreated.toJSON();
+
+    return userWithoutPassword;
   }
 }

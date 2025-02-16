@@ -1,7 +1,10 @@
 import { CreateUserDto } from '@app/resources/routes/user/dtos/create.user.dto';
+import User from '@app/resources/routes/user/entities/user.entity';
 import { UserService } from '@app/resources/routes/user/user.service';
+import { Error } from '@app/types/error';
 import { Public } from '@app/utils/decorators';
 import { Body, Controller, Post } from '@nestjs/common';
+import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 /**
  * Controller for handling user-related operations.
@@ -21,6 +24,18 @@ export class UserController {
    */
   @Post()
   @Public()
+  @ApiOperation({ summary: 'Create a new user' })
+  @ApiBody({ type: CreateUserDto })
+  @ApiResponse({
+    status: 201,
+    description: 'The user has been successfully created.',
+    type: User,
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'User already exists.',
+    type: Error,
+  })
   create(@Body() user: CreateUserDto) {
     return this.service.create(user);
   }

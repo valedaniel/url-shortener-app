@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   AutoIncrement,
   Column,
@@ -19,6 +20,10 @@ export default class User extends Model {
   @PrimaryKey
   @AutoIncrement
   @Column
+  @ApiProperty({
+    example: 1,
+    description: 'The unique identifier of the user',
+  })
   id: number;
 
   @CreatedAt
@@ -31,8 +36,16 @@ export default class User extends Model {
   deletedAt?: Date;
 
   @Column
+  @ApiProperty({
+    example: 'john.doe@example.com',
+    description: 'The email of the user',
+  })
   email: string;
 
   @Column
+  @ApiProperty({
+    example: 'hashedpassword',
+    description: 'The hashed password of the user',
+  })
   password: string;
 }

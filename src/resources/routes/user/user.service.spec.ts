@@ -1,4 +1,5 @@
 import { generateHash } from '@app/utils/generateHash';
+import { HttpException } from '@nestjs/common';
 import { getModelToken } from '@nestjs/sequelize';
 import { Test, TestingModule } from '@nestjs/testing';
 import User from './entities/user.entity';
@@ -42,8 +43,9 @@ describe('UserService', () => {
 
     it('should create a new user if user does not exist', async () => {
       const user = { email: 'test@example.com', password: 'password' } as User;
+      const createdUser = { ...user, toJSON: () => user } as User;
       jest.spyOn(userRepository, 'findOne').mockResolvedValue(null);
-      jest.spyOn(userRepository, 'create').mockResolvedValue(user);
+      jest.spyOn(userRepository, 'create').mockResolvedValue(createdUser);
       (generateHash as jest.Mock).mockReturnValue('hashedPassword');
 
       const result = await service.create(user);
@@ -56,7 +58,26 @@ describe('UserService', () => {
         ...user,
         password: 'hashedPassword',
       });
-      expect(result).toEqual(user);
+      expect(result).toEqual({ email: user.email });
+    });
+
+    it('should throw an HttpException if user already exists', async () => {
+      const user = { email: 'test@example.com', password: 'password' } as User;
+      jest.spyOn(userRepository, 'findOne').mockResolvedValue(user);
+
+      await expect(service.create(user)).rejects.toThrow(HttpException);
+    });
+
+    it('should return user without password', async () => {
+      const user = { email: 'test@example.com', password: 'password' } as User;
+      const createdUser = { ...user, toJSON: () => user } as User;
+      jest.spyOn(userRepository, 'findOne').mockResolvedValue(null);
+      jest.spyOn(userRepository, 'create').mockResolvedValue(createdUser);
+      (generateHash as jest.Mock).mockReturnValue('hashedPassword');
+
+      const result = await service.create(user);
+
+      expect(result).toEqual({ email: user.email });
     });
   });
 });
