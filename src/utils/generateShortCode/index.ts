@@ -15,9 +15,8 @@ export const generateShortCode = (url: string): string => {
     throw new Error('Invalid URL.');
   }
 
-  return crypto
-    .createHash('sha256')
-    .update(url)
-    .digest('base64url')
+  const hash = crypto.createHash('sha256').update(url).digest();
+  return BigInt('0x' + hash.toString('hex'))
+    .toString(36)
     .slice(0, 6);
 };
