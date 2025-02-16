@@ -53,7 +53,7 @@ export class UrlService {
    * @throws HttpException if the URL already exists.
    */
   async validateUrlDuplicated(originalUrl: string, id?: number) {
-    let where: WhereOptions<any> = { originalUrl };
+    let where: WhereOptions = { originalUrl };
 
     if (id) {
       where = { ...where, id: { [Op.ne]: id } };
