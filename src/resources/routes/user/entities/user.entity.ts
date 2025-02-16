@@ -27,12 +27,24 @@ export default class User extends Model {
   id: number;
 
   @CreatedAt
+  @ApiProperty({
+    example: '2025-01-01T00:00:00.000Z',
+    description: 'The date the user was created',
+  })
   createdAt: Date;
 
   @UpdatedAt
+  @ApiProperty({
+    example: '2025-01-01T00:00:00.000Z',
+    description: 'The date the user was last updated',
+  })
   updatedAt: Date;
 
   @DeletedAt
+  @ApiProperty({
+    example: '2025-01-01T00:00:00.000Z',
+    description: 'The date the user was deleted',
+  })
   deletedAt?: Date;
 
   @Column
@@ -43,9 +55,5 @@ export default class User extends Model {
   email: string;
 
   @Column
-  @ApiProperty({
-    example: 'hashedpassword',
-    description: 'The hashed password of the user',
-  })
   password: string;
 }

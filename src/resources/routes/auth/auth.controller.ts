@@ -1,3 +1,9 @@
+import { AuthService } from '@app/resources/routes/auth/auth.service';
+import { LoginUserDto } from '@app/resources/routes/auth/dtos/login.user.dto';
+import { AuthResponse } from '@app/resources/routes/auth/types/auth.response';
+import { Error } from '@app/types/error';
+import { Payload } from '@app/types/payload';
+import { Public } from '@app/utils/decorators';
 import {
   Body,
   Controller,
@@ -7,15 +13,13 @@ import {
   Post,
   Req,
 } from '@nestjs/common';
-
-import { ApiBearerAuth } from '@nestjs/swagger';
-
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { Request } from 'express';
-
-import { LoginUserDto } from '@app/resources/routes/auth/dtos/login.user.dto';
-import { Payload } from '@app/types/payload';
-import { Public } from '@app/utils/decorators';
-import { AuthService } from './auth.service';
 
 /**
  * Controller for authentication-related routes.
@@ -36,6 +40,18 @@ export class AuthController {
   @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'User login' })
+  @ApiBody({ type: LoginUserDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Login successful',
+    type: AuthResponse,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    type: Error,
+  })
   login(@Body() login: LoginUserDto) {
     return this.authService.login(login);
   }
@@ -47,6 +63,22 @@ export class AuthController {
    */
   @Get('refresh/token')
   @ApiBearerAuth()
+  @ApiOperation({ summary: 'Refresh authentication token' })
+  @ApiResponse({
+    status: 200,
+    description: 'Token refreshed successfully',
+    schema: {
+      example: {
+        accessToken: 'new_access_token',
+        refreshToken: 'new_refresh_token',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    type: Error,
+  })
   refresh(@Req() request: Request) {
     const payload = request.user as Payload;
     return this.authService.refreshToken(payload);
@@ -59,7 +91,18 @@ export class AuthController {
    */
   @Get('profile')
   @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get user profile' })
+  @ApiResponse({
+    status: 200,
+    description: 'Profile retrieved successfully',
+    type: Payload,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    type: Error,
+  })
   getProfile(@Req() request: Request) {
-    return request.user;
+    return request.user as Payload;
   }
 }

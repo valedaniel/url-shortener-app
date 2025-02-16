@@ -2,13 +2,13 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class Error {
   @ApiProperty({
-    example: 409,
+    example: 0,
     description: 'The HTTP status code',
   })
   statusCode: number;
 
   @ApiProperty({
-    example: 'User already exists.',
+    example: 'Error message.',
     description: 'A message describing the error',
   })
   message: string;

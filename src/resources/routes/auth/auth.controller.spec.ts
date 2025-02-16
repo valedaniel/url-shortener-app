@@ -1,4 +1,6 @@
 import { LoginUserDto } from '@app/resources/routes/auth/dtos/login.user.dto';
+import { AuthResponse } from '@app/resources/routes/auth/types/auth.response';
+import User from '@app/resources/routes/user/entities/user.entity';
 import { Payload } from '@app/types/payload';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Request } from 'express';
@@ -33,8 +35,8 @@ describe('AuthController', () => {
         email: 'test@email.com',
         password: 'test',
       };
-      const result = {
-        user: loginDto,
+      const result: AuthResponse = {
+        user: { email: 'test@email.com' } as Omit<User, 'password'>,
         accessToken: 'accessToken',
         refreshToken: 'refreshToken',
       };
