@@ -1,4 +1,5 @@
 import { ClickService } from '@app/resources/routes/clicks/click.service';
+import { Error } from '@app/types/error';
 import { Payload } from '@app/types/payload';
 import { Public } from '@app/utils/decorators';
 import {
@@ -10,6 +11,7 @@ import {
   Res,
   VERSION_NEUTRAL,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 
 /**
@@ -30,12 +32,14 @@ export class ClickController {
 
   @Get()
   @Public()
+  @ApiOperation({ summary: 'Welcome message' })
+  @ApiResponse({ status: 200, description: 'Welcome message' })
   async welcome() {
     return 'Welcome to the URL Shortener API - Developed by github.com/valedaniel';
   }
 
   /**
-   * Handles the click event for a given code.
+   * Handles the click event.
    *
    * @param request - The incoming request object.
    * @param response - The outgoing response object.
@@ -44,12 +48,20 @@ export class ClickController {
    */
   @Get(':code')
   @Public()
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Handle click event' })
+  @ApiResponse({ status: 307, description: 'Redirect to the original URL' })
+  @ApiResponse({
+    status: 404,
+    description: 'URL not found',
+    type: Error,
+  })
   async clicking(
     @Req() request: Request,
     @Res() response: Response,
     @Param('code') code: string,
   ) {
-    const payload = request.user as Payload;
+    const payload = request?.user as Payload;
 
     const originalURL = await this.clickService.clicking(
       request,
@@ -57,6 +69,6 @@ export class ClickController {
       payload,
     );
 
-    return response.status(HttpStatus.PERMANENT_REDIRECT).json(originalURL);
+    return response.redirect(HttpStatus.TEMPORARY_REDIRECT, originalURL);
   }
 }

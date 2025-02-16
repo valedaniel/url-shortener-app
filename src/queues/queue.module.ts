@@ -18,6 +18,10 @@ import { ConfigModule } from '@nestjs/config';
     }),
     BullModule.registerQueue({
       name: CLICK_QUEUE,
+      defaultJobOptions: {
+        removeOnComplete: true,
+        removeOnFail: 20,
+      },
     }),
     forwardRef(() => ClickModule),
   ],

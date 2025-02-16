@@ -22,7 +22,11 @@ export class ClickConsumer {
   @Process(ADD_NEW_CLICK)
   async handleClickJob(job: Job<ClickJob>) {
     const { urlId, userId } = job.data;
+
+    if (!urlId) throw new Error('Invalid click data');
+
     const clickToCreate = { urlId, userId } as Click;
+
     await this.clickService.create(clickToCreate);
   }
 
