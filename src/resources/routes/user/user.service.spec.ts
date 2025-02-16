@@ -25,6 +25,8 @@ describe('UserService', () => {
       ],
     }).compile();
 
+    module.useLogger(false);
+
     service = module.get<UserService>(UserService);
     userRepository = module.get<typeof User>(getModelToken(User));
   });

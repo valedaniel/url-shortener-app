@@ -33,6 +33,8 @@ describe('ClickService', () => {
       ],
     }).compile();
 
+    module.useLogger(false);
+
     service = module.get<ClickService>(ClickService);
     urlService = module.get<UrlService>(UrlService);
     clickProducer = module.get<ClickProducer>(ClickProducer);

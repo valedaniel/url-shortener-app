@@ -27,6 +27,8 @@ describe('UrlController', () => {
       ],
     }).compile();
 
+    module.useLogger(false);
+
     service = module.get<UrlService>(UrlService);
 
     urlController = module.get<UrlController>(UrlController);
