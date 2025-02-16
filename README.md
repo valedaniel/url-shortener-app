@@ -4,6 +4,13 @@
 
 Este é um aplicativo de encurtador de URLs desenvolvido com o framework NestJS. Ele permite que os usuários encurtem URLs longas e rastreiem cliques.
 
+## Funcionalidades
+
+- Cadastro de usuários e autenticação
+- Encurtar links enviados
+- Listar com quantidade total de cliques, editar o endereço de destino e excluir URLs encurtadas pelo usuário proprietário
+- Todos os acessos aos links são contabilizados
+
 ## Pré-requisitos
 
 - **Yarn**: versão 1.22.22
@@ -39,19 +46,27 @@ Este é um aplicativo de encurtador de URLs desenvolvido com o framework NestJS.
 
 1. Certifique-se de que o PostgreSQL e o Redis estão em execução.
 
-2. Execute as migrações do banco de dados:
+2. Crie o banco de dados que deseja e configure corretamente o seu nome junto ao [.env]
+
+3. Execute as migrações do banco de dados:
 
    ```bash
    yarn migrate
    ```
 
-3. Inicie o servidor em modo de desenvolvimento:
+4. Faça o build da API:
 
    ```bash
-   yarn start:dev
+   yarn build
    ```
 
-4. Acesse a aplicação em `http://localhost:3000`.
+5. Inicie o servidor em modo de produção:
+
+   ```bash
+   yarn start:prod
+   ```
+
+6. Acesse a aplicação em `http://localhost:[Porta definida no .env]`.
 
 ## Executando o Projeto com Docker Compose
 
