@@ -42,9 +42,9 @@ Este é um aplicativo de encurtador de URLs desenvolvido com o framework NestJS.
 
 **Pontos de atenção**
 
-1. DATABASE_DIALECT deve estar definido como "postgres" para que funcione da maneira esperada.
+1. DATABASE_DIALECT deve estar definido como "postgres" para que funcione corretamente.
 
-2. NODE_ENV deve estar preenchido com o ambiente esperado (ex: local) para que as migrations executem.
+2. NODE_ENV deve estar preenchido com o ambiente desejado (ex: local) para que as migrations executem.
 
 ## Executando o Projeto Localmente
 
