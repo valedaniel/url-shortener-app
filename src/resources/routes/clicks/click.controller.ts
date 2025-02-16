@@ -1,6 +1,7 @@
 import { ClickService } from '@app/resources/routes/clicks/click.service';
 import { Error } from '@app/types/error';
 import { Payload } from '@app/types/payload';
+import { WELCOME_MESSAGE } from '@app/utils/constants';
 import { Public } from '@app/utils/decorators';
 import {
   Controller,
@@ -35,7 +36,7 @@ export class ClickController {
   @ApiOperation({ summary: 'Welcome message' })
   @ApiResponse({ status: 200, description: 'Welcome message' })
   async welcome() {
-    return 'Welcome to the URL Shortener API - Developed by github.com/valedaniel';
+    return WELCOME_MESSAGE;
   }
 
   /**

@@ -1,3 +1,4 @@
+import { WELCOME_MESSAGE } from '@app/utils/constants';
 import { HttpStatus } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Request, Response } from 'express';
@@ -26,14 +27,13 @@ describe('ClickController', () => {
   });
 
   describe('clicking', () => {
-    it('should return the original URL and set status to PERMANENT_REDIRECT', async () => {
+    it('should return the original URL and set status to TEMPORARY_REDIRECT', async () => {
       const requestWithUser = {
         user: { id: 1 },
       } as unknown as Request;
 
       const response = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
+        redirect: jest.fn(),
       } as unknown as Response;
 
       const code = 'test-code';
@@ -48,10 +48,17 @@ describe('ClickController', () => {
         code,
         requestWithUser.user,
       );
-      expect(response.status).toHaveBeenCalledWith(
-        HttpStatus.PERMANENT_REDIRECT,
+      expect(response.redirect).toHaveBeenCalledWith(
+        HttpStatus.TEMPORARY_REDIRECT,
+        originalURL,
       );
-      expect(response.json).toHaveBeenCalledWith(originalURL);
+    });
+  });
+
+  describe('welcome', () => {
+    it('should return welcome message', async () => {
+      const result = await clickController.welcome();
+      expect(result).toBe(WELCOME_MESSAGE);
     });
   });
 });
