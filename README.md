@@ -14,9 +14,9 @@ Este é um aplicativo de encurtador de URLs desenvolvido com o framework NestJS.
 ## Pré-requisitos
 
 - **Yarn**: versão 1.22.22
-- **Node.js**: versão entre v22.14.0 e v20.18.3
-- **PostgreSQL**: versão 16 (recomendado)
-- **Redis**: versão 7.4.2 (recomendado)
+- **Node.js**: versões (v22.14.0, v20.18.3)
+- **PostgreSQL**: versão 16
+- **Redis**: versão 7.4.2
 
 ## Configuração do Ambiente
 
@@ -39,6 +39,12 @@ Este é um aplicativo de encurtador de URLs desenvolvido com o framework NestJS.
      cp .env.example .env
      ```
    - Edite o arquivo [.env] com suas configurações específicas.
+
+**Pontos de atenção**
+
+1. DATABASE_DIALECT deve estar definido como "postgres" para que funcione da maneira esperada.
+
+2. NODE_ENV deve estar preenchido com o ambiente esperado (ex: local) para que as migrations executem.
 
 ## Executando o Projeto Localmente
 
@@ -127,7 +133,7 @@ Este é um aplicativo de encurtador de URLs desenvolvido com o framework NestJS.
 
 ## Documentação da API
 
-A documentação da API está disponível em `http://localhost:3000/docs` quando o servidor está em execução.
+A documentação da API está disponível em `http://localhost:[Porta definida no .env]/docs` quando o servidor está em execução.
 
 ## Suporte
 
