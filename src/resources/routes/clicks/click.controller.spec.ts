@@ -1,3 +1,4 @@
+import { WELCOME_MESSAGE } from '@app/utils/constants';
 import { HttpStatus } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Request, Response } from 'express';
@@ -57,7 +58,7 @@ describe('ClickController', () => {
   describe('welcome', () => {
     it('should return welcome message', async () => {
       const result = await clickController.welcome();
-      expect(result).toBe('');
+      expect(result).toBe(WELCOME_MESSAGE);
     });
   });
 });
