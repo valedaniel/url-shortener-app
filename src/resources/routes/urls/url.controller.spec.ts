@@ -45,17 +45,13 @@ describe('UrlController', () => {
 
     jest
       .spyOn(urlController, 'update')
-      .mockImplementation(
-        async (id: string, req: Request, body: UrlUpdateDto) => {
-          return await service.update(req, parseInt(id), body);
-        },
-      );
-
-    jest
-      .spyOn(urlController, 'delete')
-      .mockImplementation(async (id: string) => {
-        return await service.delete(parseInt(id));
+      .mockImplementation(async ({ id }, req: Request, body: UrlUpdateDto) => {
+        return await service.update(req, id, body);
       });
+
+    jest.spyOn(urlController, 'delete').mockImplementation(async ({ id }) => {
+      return await service.delete(id);
+    });
   });
 
   it('should be defined', () => {
@@ -103,7 +99,7 @@ describe('UrlController', () => {
 
       jest.spyOn(service, 'update').mockResolvedValue(result);
 
-      expect(await urlController.update('1', request, body)).toBe(result);
+      expect(await urlController.update({ id: 1 }, request, body)).toBe(result);
       expect(service.update).toHaveBeenCalledWith(request, 1, body);
     });
   });
@@ -114,7 +110,7 @@ describe('UrlController', () => {
 
       jest.spyOn(service, 'delete').mockResolvedValue(result);
 
-      expect(await urlController.delete('1')).toBe(result);
+      expect(await urlController.delete({ id: 1 })).toBe(result);
       expect(service.delete).toHaveBeenCalledWith(1);
     });
   });

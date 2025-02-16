@@ -1,3 +1,4 @@
+import { FindOneParams } from '@app/resources/routes/urls/dtos/find.one.dto';
 import { UrlShortDto } from '@app/resources/routes/urls/dtos/url.short.dto';
 import { UrlUpdateDto } from '@app/resources/routes/urls/dtos/url.update.dto';
 import { OwnershipGuard } from '@app/resources/routes/urls/guards/ownership.guard';
@@ -121,10 +122,11 @@ export class UrlController {
     type: Unauthorized,
   })
   update(
-    @Param('id') id: string,
+    @Param() params: FindOneParams,
     @Req() request: Request,
     @Body() body: UrlUpdateDto,
   ) {
+    const { id } = params;
     return this.service.update(request, +id, body);
   }
 
@@ -152,7 +154,8 @@ export class UrlController {
     description: 'Unauthorized.',
     type: Unauthorized,
   })
-  delete(@Param('id') id: string) {
+  delete(@Param() params: FindOneParams) {
+    const { id } = params;
     return this.service.delete(+id);
   }
 }

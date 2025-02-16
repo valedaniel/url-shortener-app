@@ -19,7 +19,17 @@ export class OwnershipGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: Request = context.switchToHttp().getRequest();
     const user = request.user as Payload;
-    const urlId = Number(request.params.id);
+    const urlId = Number(request?.params?.id);
+
+    if (isNaN(urlId)) {
+      this.logger.error(
+        `${request.method} ${request.url} - Invalid URL id: ${request?.params?.id}`,
+      );
+      throw new HttpException(
+        'URL id must be a number',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     const url = await this.urlService.findByIdOrThrow(urlId);
 
