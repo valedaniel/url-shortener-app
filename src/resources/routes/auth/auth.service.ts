@@ -59,7 +59,7 @@ export class AuthService {
         refreshToken,
       } as AuthResponse;
     } catch (err) {
-      this.logger.error('Login failed', { error: err.message });
+      this.logger.error('Login failed Unauthorized');
       throw err;
     }
   }
