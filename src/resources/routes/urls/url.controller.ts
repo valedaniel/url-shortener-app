@@ -15,6 +15,9 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+
+import { ApiBearerAuth } from '@nestjs/swagger';
+
 import { Request } from 'express';
 
 /**
@@ -51,6 +54,7 @@ export class UrlController {
    * @returns A list of shortened URLs.
    */
   @Get()
+  @ApiBearerAuth()
   list(@Req() request: Request) {
     const payload = request.user as Payload;
     return this.service.list(payload);
@@ -66,6 +70,7 @@ export class UrlController {
    */
   @Put(':id')
   @UseGuards(OwnershipGuard)
+  @ApiBearerAuth()
   update(
     @Param('id') id: string,
     @Req() request: Request,
@@ -82,6 +87,7 @@ export class UrlController {
    */
   @Delete(':id')
   @UseGuards(OwnershipGuard)
+  @ApiBearerAuth()
   delete(@Param('id') id: string) {
     return this.service.delete(+id);
   }

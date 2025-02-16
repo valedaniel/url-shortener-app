@@ -8,6 +8,8 @@ import {
   Req,
 } from '@nestjs/common';
 
+import { ApiBearerAuth } from '@nestjs/swagger';
+
 import { Request } from 'express';
 
 import { LoginUserDto } from '@app/resources/routes/auth/dtos/login.user.dto';
@@ -44,6 +46,7 @@ export class AuthController {
    * @returns The new authentication token.
    */
   @Get('refresh/token')
+  @ApiBearerAuth()
   refresh(@Req() request: Request) {
     const payload = request.user as Payload;
     return this.authService.refreshToken(payload);
@@ -55,6 +58,7 @@ export class AuthController {
    * @returns The user profile.
    */
   @Get('profile')
+  @ApiBearerAuth()
   getProfile(@Req() request: Request) {
     return request.user;
   }
