@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
 import { CreateUserDto } from '@app/resources/routes/user/dtos/create.user.dto';
@@ -19,6 +19,8 @@ export class UserService {
     @InjectModel(User) private readonly userRepository: typeof User,
   ) {}
 
+  private readonly logger = new Logger(UserService.name);
+
   /**
    * Creates a new user.
    *
@@ -27,23 +29,30 @@ export class UserService {
    * @throws {HttpException} If a user with the given email already exists.
    */
   async create(user: CreateUserDto) {
-    const userExists = await this.userRepository.findOne({
-      where: { email: user.email },
-    });
+    try {
+      const userExists = await this.userRepository.findOne({
+        where: { email: user.email },
+      });
 
-    if (userExists) {
-      throw new HttpException('User already exists', HttpStatus.CONFLICT);
+      if (userExists) {
+        throw new HttpException('User already exists', HttpStatus.CONFLICT);
+      }
+
+      const hashedPassword = generateHash(user.password);
+
+      const userCreated = await this.userRepository.create({
+        ...user,
+        password: hashedPassword,
+      });
+
+      const { password: _, ...userWithoutPassword } = userCreated.toJSON();
+
+      this.logger.log(`User (${userCreated.id}) created successfully`);
+
+      return userWithoutPassword;
+    } catch (error) {
+      this.logger.error('Error creating user', { error });
+      throw error;
     }
-
-    const hashedPassword = generateHash(user.password);
-
-    const userCreated = await this.userRepository.create({
-      ...user,
-      password: hashedPassword,
-    });
-
-    const { password: _, ...userWithoutPassword } = userCreated.toJSON();
-
-    return userWithoutPassword;
   }
 }

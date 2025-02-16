@@ -1,10 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
-
 import { UrlUpdateDto } from '@app/resources/routes/urls/dtos/url.update.dto';
 import Url from '@app/resources/routes/urls/entities/url.entity';
 import { Payload } from '@app/types/payload';
 import { shortenUrl } from '@app/utils/shortenUrl';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
 import { Request } from 'express';
 import { Op, Sequelize, WhereOptions } from 'sequelize';
 
@@ -13,6 +12,8 @@ import { Op, Sequelize, WhereOptions } from 'sequelize';
  */
 @Injectable()
 export class UrlService {
+  private readonly logger = new Logger(UrlService.name);
+
   /**
    * Constructs a new UrlService.
    * @param urlRepository - The URL repository.
@@ -77,24 +78,30 @@ export class UrlService {
    * @throws HttpException if the URL already exists.
    */
   async create(request: Request, originalUrl: string) {
-    const payload = request?.user as Payload;
+    this.logger.log(`Creating new shortened URL`);
 
-    await this.validateUrlDuplicated(originalUrl);
+    try {
+      const payload = request?.user as Payload;
 
-    const urlShort = shortenUrl(request, originalUrl);
+      await this.validateUrlDuplicated(originalUrl);
 
-    return this.urlRepository.create({
-      originalUrl,
-      urlShort,
-      ownerId: payload?.id,
-    });
+      const urlShort = shortenUrl(request, originalUrl);
+
+      const urlCreated = await this.urlRepository.create({
+        originalUrl,
+        urlShort,
+        ownerId: payload?.id,
+      });
+
+      this.logger.log(`URL created successfully (${urlCreated.id})`);
+
+      return urlCreated;
+    } catch (error) {
+      this.logger.error('Error creating shortened URL', { error });
+      throw error;
+    }
   }
 
-  /**
-   * Lists all URLs for a given owner.
-   * @param payload - The payload containing the owner's ID.
-   * @returns A list of URLs.
-   */
   /**
    * Retrieves a list of URLs associated with the given payload's owner ID.
    *
@@ -113,26 +120,35 @@ export class UrlService {
    * The total click count is calculated using a SQL COUNT function on the associated clicks.
    */
   async list(payload: Payload) {
-    return this.urlRepository.findAll({
-      attributes: [
-        'id',
-        'originalUrl',
-        'urlShort',
-        'ownerId',
-        'createdAt',
-        'updatedAt',
-        [
-          Sequelize.cast(
-            Sequelize.fn('COUNT', Sequelize.col('clicks.id')),
-            'integer',
-          ),
-          'totalClicks',
+    const { id } = payload;
+
+    this.logger.log(`Listing URLs for owner ${id}`);
+
+    try {
+      return this.urlRepository.findAll({
+        attributes: [
+          'id',
+          'originalUrl',
+          'urlShort',
+          'ownerId',
+          'createdAt',
+          'updatedAt',
+          [
+            Sequelize.cast(
+              Sequelize.fn('COUNT', Sequelize.col('clicks.id')),
+              'integer',
+            ),
+            'totalClicks',
+          ],
         ],
-      ],
-      where: { ownerId: payload.id },
-      include: [{ association: 'clicks', attributes: [] }],
-      group: ['urls.id'],
-    });
+        where: { ownerId: id },
+        include: [{ association: 'clicks', attributes: [] }],
+        group: ['urls.id'],
+      });
+    } catch (error) {
+      this.logger.error('Error listing URLs', { ownerId: id, error });
+      throw error;
+    }
   }
 
   /**
@@ -146,16 +162,23 @@ export class UrlService {
   async update(request: Request, id: number, body: UrlUpdateDto) {
     const { originalUrl } = body;
 
-    await this.validateUrlDuplicated(originalUrl, id);
+    this.logger.log(`Updating URL (${id})`);
 
-    const urlShort = shortenUrl(request, originalUrl);
+    try {
+      await this.validateUrlDuplicated(originalUrl, id);
 
-    await this.urlRepository.update(
-      { originalUrl, urlShort },
-      { where: { id } },
-    );
+      const urlShort = shortenUrl(request, originalUrl);
 
-    return this.findByIdOrThrow(id);
+      await this.urlRepository.update(
+        { originalUrl, urlShort },
+        { where: { id } },
+      );
+
+      return this.findByIdOrThrow(id);
+    } catch (error) {
+      this.logger.error('Error updating URL', { id, error });
+      throw error;
+    }
   }
 
   /**
@@ -165,11 +188,18 @@ export class UrlService {
    * @returns {Promise<boolean>} - A promise that resolves to `true` if the entry was deleted, `false` otherwise.
    */
   async delete(id: number): Promise<boolean> {
-    const rows = await this.urlRepository.destroy({
-      where: { id },
-      limit: 1,
-    });
+    this.logger.log(`Deleting URL (${id})`);
 
-    return rows > 0;
+    try {
+      const rows = await this.urlRepository.destroy({
+        where: { id },
+        limit: 1,
+      });
+
+      return rows > 0;
+    } catch (error) {
+      this.logger.error('Error deleting URL', { id, error });
+      throw error;
+    }
   }
 }

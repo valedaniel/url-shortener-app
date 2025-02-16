@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
 import { ClickProducer } from '@app/queues/click/click.producer';
@@ -15,6 +15,8 @@ import { Request } from 'express';
  */
 @Injectable()
 export class ClickService extends CrudService<Click> {
+  private readonly logger = new Logger(ClickService.name);
+
   /**
    * Constructs a new instance of the ClickService.
    *
@@ -40,21 +42,28 @@ export class ClickService extends CrudService<Click> {
    * @throws HttpException if the URL is not found.
    */
   async clicking(request: Request, code: string, payload?: Payload) {
-    const fullDomain = getFullDomain(request);
+    try {
+      const fullDomain = getFullDomain(request);
 
-    const url = await this.urlService.findByDomain(`${fullDomain}/${code}`);
+      const url = await this.urlService.findByDomain(`${fullDomain}/${code}`);
 
-    if (!url) {
-      throw new HttpException('URL not found', HttpStatus.NOT_FOUND);
+      if (!url) {
+        throw new HttpException('URL not found', HttpStatus.NOT_FOUND);
+      }
+
+      const clickJob: ClickJob = {
+        userId: payload?.id,
+        urlId: url.id,
+      };
+
+      await this.clickProducer.addClick(clickJob);
+
+      this.logger.log(`Click event for URL (${url.id})`);
+
+      return url.originalUrl;
+    } catch (error) {
+      this.logger.error('Error handling click', { error });
+      throw error;
     }
-
-    const clickJob: ClickJob = {
-      userId: payload?.id,
-      urlId: url.id,
-    };
-
-    await this.clickProducer.addClick(clickJob);
-
-    return url.originalUrl;
   }
 }
