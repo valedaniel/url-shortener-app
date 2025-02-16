@@ -46,7 +46,7 @@ Este é um aplicativo de encurtador de URLs desenvolvido com o framework NestJS.
 
 1. Certifique-se de que o PostgreSQL e o Redis estão em execução.
 
-2. Crie o banco de dados que deseja e configure corretamente o seu nome junto ao [.env]
+2. Crie o banco de dados que deseja e configure corretamente o seu nome junto ao [.env].
 
 3. Execute as migrações do banco de dados:
 
