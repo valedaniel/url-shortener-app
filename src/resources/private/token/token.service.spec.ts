@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import User from '@app/resources/routes/user/entities/user.entity';
 import {
   JWT_ACCESS_TOKEN_EXPIRES,
@@ -25,6 +26,8 @@ describe('TokenService', () => {
         },
       ],
     }).compile();
+
+    module.useLogger(false);
 
     service = module.get<TokenService>(TokenService);
     jwtService = module.get<JwtService>(JwtService);

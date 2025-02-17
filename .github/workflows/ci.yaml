@@ -11,8 +11,28 @@ on:
       - dev
 
 jobs:
-  run-tests:
+  lint:
     runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.14'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run lint
+        run: yarn lint
+
+  test:
+    runs-on: ubuntu-latest
+    needs: lint
 
     steps:
       - name: Checkout repository
