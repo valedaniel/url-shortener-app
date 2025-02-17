@@ -143,7 +143,7 @@ A documentação da API está disponível em `http://localhost:[Porta definida n
 
 Usar um Load Balancer (ex: NGINX, AWS ALB) para distribuir tráfego entre instâncias.
 
-### Utilizar um balanceador de carga
+### CDN
 
 Configurar uma CDN para armazenar respostas comuns e melhorar a latência de modo que mantenha o registro dos clicks.
 
