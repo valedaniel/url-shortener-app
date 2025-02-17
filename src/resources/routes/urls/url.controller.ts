@@ -23,6 +23,7 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
+  ApiParam,
   ApiResponse,
 } from '@nestjs/swagger';
 import { Request } from 'express';
@@ -121,6 +122,7 @@ export class UrlController {
     description: 'Unauthorized.',
     type: Unauthorized,
   })
+  @ApiParam({ name: 'id', type: Number })
   update(
     @Param() params: FindOneParams,
     @Req() request: Request,
@@ -154,6 +156,7 @@ export class UrlController {
     description: 'Unauthorized.',
     type: Unauthorized,
   })
+  @ApiParam({ name: 'id', type: Number })
   delete(@Param() params: FindOneParams) {
     const { id } = params;
     return this.service.delete(+id);

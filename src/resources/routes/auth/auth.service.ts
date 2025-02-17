@@ -1,11 +1,14 @@
 import { TokenService } from '@app/resources/private/token/token.service';
 import { LoginUserDto } from '@app/resources/routes/auth/dtos/login.user.dto';
 import { AuthResponse } from '@app/resources/routes/auth/types/auth.response';
+import { RefreshTokenResponse } from '@app/resources/routes/auth/types/refresh.token.response';
 import User from '@app/resources/routes/user/entities/user.entity';
 import { Payload } from '@app/types/payload';
+import { handleError } from '@app/utils/handleError';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcrypt';
+import { Optional } from 'sequelize';
 
 /**
  * AuthService handles authentication-related operations such as login and token refresh.
@@ -49,7 +52,10 @@ export class AuthService {
       const { accessToken, refreshToken } =
         this.tokenService.generateTokens(user);
 
-      const { password: _, ...userWithoutPassword } = user.toJSON();
+      const userWithoutPassword: Optional<User, 'password'> =
+        user.toJSON<User>();
+
+      delete userWithoutPassword.password;
 
       this.logger.log(`User (${user.id}) logged in successfully`);
 
@@ -69,13 +75,15 @@ export class AuthService {
    * @param payload - The payload containing user information.
    * @returns An object containing the new access token and refresh token.
    */
-  async refreshToken(payload: Payload) {
+  refreshToken(payload: Payload) {
     this.logger.log(`Refreshing tokens User (${payload.id})`);
 
     try {
-      return this.tokenService.generateTokens(payload as User);
+      return this.tokenService.generateTokens(
+        payload as User,
+      ) as RefreshTokenResponse;
     } catch (error) {
-      this.logger.error('Error refreshing tokens', { error });
+      handleError(error, this.logger, 'Error refreshing tokens');
       throw error;
     }
   }

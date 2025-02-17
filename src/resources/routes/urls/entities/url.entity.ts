@@ -58,7 +58,7 @@ export default class Url extends Model {
   originalUrl: string;
 
   @ApiProperty({
-    example: 'http://localhost/aZbKq7',
+    example: 'http://localhost:3000/aZbKq7',
     description: 'The shortened URL',
   })
   @Column({ field: 'url_short' })

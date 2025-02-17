@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { LoginUserDto } from '@app/resources/routes/auth/dtos/login.user.dto';
 import { AuthResponse } from '@app/resources/routes/auth/types/auth.response';
+import { RefreshTokenResponse } from '@app/resources/routes/auth/types/refresh.token.response';
 import User from '@app/resources/routes/user/entities/user.entity';
 import { Payload } from '@app/types/payload';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -48,7 +50,7 @@ describe('AuthController', () => {
   });
 
   describe('refresh', () => {
-    it('should call AuthService.refreshToken with correct parameters', async () => {
+    it('should call AuthService.refreshToken with correct parameters', () => {
       const user = { id: 1, email: 'test@email.com' };
 
       const request = { user };
@@ -56,10 +58,11 @@ describe('AuthController', () => {
       const result = {
         accessToken: 'accessToken',
         refreshToken: 'refreshToken',
-      };
-      jest.spyOn(authService, 'refreshToken').mockResolvedValue(result);
+      } as RefreshTokenResponse;
 
-      expect(await authController.refresh(request as unknown as Request)).toBe(
+      jest.spyOn(authService, 'refreshToken').mockReturnValue(result);
+
+      expect(authController.refresh(request as unknown as Request)).toBe(
         result,
       );
       expect(authService.refreshToken).toHaveBeenCalledWith(payload);

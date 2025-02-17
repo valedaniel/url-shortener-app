@@ -18,6 +18,7 @@ export abstract class CrudService<T extends Model<T>> {
   constructor(private readonly repository: Repository<T>) {}
 
   async create(data: T, options?: CreateOptions<Attributes<T>>) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const creationAttributes: CreationAttributes<T> = { ...data } as any;
     return this.repository.create(creationAttributes, options);
   }

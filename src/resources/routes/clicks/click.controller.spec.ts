@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { WELCOME_MESSAGE } from '@app/utils/constants';
 import { HttpStatus } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -56,8 +57,8 @@ describe('ClickController', () => {
   });
 
   describe('welcome', () => {
-    it('should return welcome message', async () => {
-      const result = await clickController.welcome();
+    it('should return welcome message', () => {
+      const result = clickController.welcome();
       expect(result).toBe(WELCOME_MESSAGE);
     });
   });

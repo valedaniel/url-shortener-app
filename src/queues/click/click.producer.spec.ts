@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { ClickProducer } from '@app/queues/click/click.producer';
 import { ADD_NEW_CLICK, CLICK_QUEUE } from '@app/queues/click/constants';
 import { ClickJob } from '@app/queues/click/types/click.job';

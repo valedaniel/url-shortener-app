@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/sequelize';
 
 import { CreateUserDto } from '@app/resources/routes/user/dtos/create.user.dto';
 import { generateHash } from '@app/utils/generateHash';
+import { handleError } from '@app/utils/handleError';
+import { Optional } from 'sequelize';
 import User from './entities/user.entity';
 
 /**
@@ -45,13 +47,17 @@ export class UserService {
         password: hashedPassword,
       });
 
-      const { password: _, ...userWithoutPassword } = userCreated.toJSON();
+      const userWithoutPassword = {
+        ...userCreated.toJSON<User>(),
+      } as Optional<User, 'password'>;
+
+      delete userWithoutPassword.password;
 
       this.logger.log(`User (${userCreated.id}) created successfully`);
 
-      return userWithoutPassword;
+      return userWithoutPassword as Omit<User, 'password'>;
     } catch (error) {
-      this.logger.error('Error creating user', { error });
+      handleError(error, this.logger, 'Error creating user');
       throw error;
     }
   }

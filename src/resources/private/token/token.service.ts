@@ -57,6 +57,9 @@ export class TokenService {
         refreshToken,
       };
     } catch (error) {
+      this.logger.error(
+        `Error generating tokens for user (${user?.id}): ${error}`,
+      );
       throw new HttpException(
         'Error generating tokens',
         HttpStatus.INTERNAL_SERVER_ERROR,

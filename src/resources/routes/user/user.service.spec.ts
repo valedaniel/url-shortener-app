@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { generateHash } from '@app/utils/generateHash';
 import { HttpException } from '@nestjs/common';
 import { getModelToken } from '@nestjs/sequelize';
@@ -50,7 +51,7 @@ describe('UserService', () => {
       jest.spyOn(userRepository, 'create').mockResolvedValue(createdUser);
       (generateHash as jest.Mock).mockReturnValue('hashedPassword');
 
-      const result = await service.create(user);
+      const result = (await service.create(user)) as User;
 
       expect(userRepository.findOne).toHaveBeenCalledWith({
         where: { email: user.email },
@@ -77,7 +78,7 @@ describe('UserService', () => {
       jest.spyOn(userRepository, 'create').mockResolvedValue(createdUser);
       (generateHash as jest.Mock).mockReturnValue('hashedPassword');
 
-      const result = await service.create(user);
+      const result = (await service.create(user)) as User;
 
       expect(result).toEqual({ email: user.email });
     });

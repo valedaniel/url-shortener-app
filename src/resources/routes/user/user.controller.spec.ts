@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import User from '@app/resources/routes/user/entities/user.entity';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateUserDto } from './dtos/create.user.dto';

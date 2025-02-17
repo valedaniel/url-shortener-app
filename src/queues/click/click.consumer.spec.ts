@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { CLICK_QUEUE } from '@app/queues/click/constants';
+import { ClickJob } from '@app/queues/click/types/click.job';
 import { ClickService } from '@app/resources/routes/clicks/click.service';
 import { getQueueToken } from '@nestjs/bull';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -19,7 +21,7 @@ describe('ClickConsumer', () => {
       urlId: 1,
       userId: 1,
     },
-  } as Job;
+  } as Job<ClickJob>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

@@ -2,6 +2,7 @@ import { IS_PUBLIC_KEY } from '@app/utils/constants';
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
 import { jwtDecode } from 'jwt-decode';
 
 @Injectable()
@@ -17,7 +18,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     ]);
 
     if (isPublic) {
-      const request = super.getRequest(context);
+      const request = super.getRequest(context) as Request;
 
       if (request?.headers?.authorization)
         request.user = jwtDecode(request?.headers?.authorization);

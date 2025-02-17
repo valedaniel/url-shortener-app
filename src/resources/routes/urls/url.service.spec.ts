@@ -117,7 +117,9 @@ describe('UrlService', () => {
         },
       ];
 
-      jest.spyOn(urlRepository, 'findAll').mockResolvedValue(urls as any);
+      jest
+        .spyOn(urlRepository, 'findAll')
+        .mockResolvedValue(urls as unknown as Url[]);
 
       expect(await service.list(payload)).toEqual(urls);
     });
@@ -133,10 +135,10 @@ describe('UrlService', () => {
 
       (shortenUrl as jest.Mock).mockReturnValue(urlShort);
       jest.spyOn(service, 'validateUrlDuplicated').mockResolvedValue(undefined);
-      jest.spyOn(urlRepository, 'update').mockResolvedValue([1] as any);
+      jest.spyOn(urlRepository, 'update').mockResolvedValue([1]);
       jest
         .spyOn(service, 'findByIdOrThrow')
-        .mockResolvedValue(updatedUrl as any);
+        .mockResolvedValue(updatedUrl as Url);
 
       expect(await service.update(request, id, body)).toEqual(updatedUrl);
     });

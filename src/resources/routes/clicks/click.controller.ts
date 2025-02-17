@@ -35,7 +35,7 @@ export class ClickController {
   @Public()
   @ApiOperation({ summary: 'Welcome message' })
   @ApiResponse({ status: 200, description: 'Welcome message' })
-  async welcome() {
+  welcome() {
     return WELCOME_MESSAGE;
   }
 

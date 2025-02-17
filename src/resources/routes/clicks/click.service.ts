@@ -8,6 +8,7 @@ import { UrlService } from '@app/resources/routes/urls/url.service';
 import { CrudService } from '@app/share/crud.service';
 import { Payload } from '@app/types/payload';
 import { getFullDomain } from '@app/utils/getFullDomain';
+import { handleError } from '@app/utils/handleError';
 import { Request } from 'express';
 
 /**
@@ -62,7 +63,7 @@ export class ClickService extends CrudService<Click> {
 
       return url.originalUrl;
     } catch (error) {
-      this.logger.error('Error handling click', { error });
+      handleError(error, this.logger, 'Error handling click');
       throw error;
     }
   }

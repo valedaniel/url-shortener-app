@@ -1,6 +1,7 @@
 import { UrlUpdateDto } from '@app/resources/routes/urls/dtos/url.update.dto';
 import Url from '@app/resources/routes/urls/entities/url.entity';
 import { Payload } from '@app/types/payload';
+import { handleError } from '@app/utils/handleError';
 import { shortenUrl } from '@app/utils/shortenUrl';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
@@ -97,7 +98,7 @@ export class UrlService {
 
       return urlCreated;
     } catch (error) {
-      this.logger.error('Error creating shortened URL', { error });
+      handleError(error, this.logger, 'Error creating shortened URL');
       throw error;
     }
   }
@@ -146,7 +147,7 @@ export class UrlService {
         group: ['urls.id'],
       });
     } catch (error) {
-      this.logger.error('Error listing URLs', { ownerId: id, error });
+      handleError(error, this.logger, 'Error listing URLs');
       throw error;
     }
   }
@@ -176,7 +177,7 @@ export class UrlService {
 
       return this.findByIdOrThrow(id);
     } catch (error) {
-      this.logger.error('Error updating URL', { id, error });
+      handleError(error, this.logger, 'Error updating URL');
       throw error;
     }
   }
@@ -187,7 +188,7 @@ export class UrlService {
    * @param {number} id - The ID of the URL entry to delete.
    * @returns {Promise<boolean>} - A promise that resolves to `true` if the entry was deleted, `false` otherwise.
    */
-  async delete(id: number): Promise<boolean> {
+  async delete(id: number) {
     this.logger.log(`Deleting URL (${id})`);
 
     try {
@@ -198,7 +199,7 @@ export class UrlService {
 
       return rows > 0;
     } catch (error) {
-      this.logger.error('Error deleting URL', { id, error });
+      handleError(error, this.logger, 'Error deleting URL');
       throw error;
     }
   }

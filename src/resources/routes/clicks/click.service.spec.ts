@@ -4,6 +4,7 @@ import { getFullDomain } from '@app/utils/getFullDomain';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { getModelToken } from '@nestjs/sequelize';
 import { Test, TestingModule } from '@nestjs/testing';
+import { Request } from 'express';
 import { UrlService } from '../urls/url.service';
 import { ClickService } from './click.service';
 import Click from './entities/click.entity';
@@ -12,8 +13,6 @@ jest.mock('@app/utils/getFullDomain');
 
 describe('ClickService', () => {
   let service: ClickService;
-  let urlService: UrlService;
-  let clickProducer: ClickProducer;
 
   const mockClickRepository = {};
   const mockUrlService = {
@@ -36,8 +35,6 @@ describe('ClickService', () => {
     module.useLogger(false);
 
     service = module.get<ClickService>(ClickService);
-    urlService = module.get<UrlService>(UrlService);
-    clickProducer = module.get<ClickProducer>(ClickProducer);
   });
 
   it('should be defined', () => {
@@ -46,7 +43,7 @@ describe('ClickService', () => {
 
   describe('clicking', () => {
     it('should return the original URL if found', async () => {
-      const request = { headers: { host: 'example.com' } } as any;
+      const request = { headers: { host: 'example.com' } } as Request;
       const code = 'hdmcsa';
       const domain = 'http://example.com';
 
@@ -69,7 +66,7 @@ describe('ClickService', () => {
     });
 
     it('should throw an HttpException if the URL is not found', async () => {
-      const request = { headers: { host: 'example.com' } } as any;
+      const request = { headers: { host: 'example.com' } } as Request;
       const code = 'c54hcv';
       const domain = 'http://example.com';
 

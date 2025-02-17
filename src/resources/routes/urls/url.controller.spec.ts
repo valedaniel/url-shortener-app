@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { UrlShortDto } from '@app/resources/routes/urls/dtos/url.short.dto';
 import { UrlUpdateDto } from '@app/resources/routes/urls/dtos/url.update.dto';
 import Url from '@app/resources/routes/urls/entities/url.entity';

@@ -100,7 +100,7 @@ describe('AuthService', () => {
   });
 
   describe('refreshToken', () => {
-    it('should return new tokens', async () => {
+    it('should return new tokens', () => {
       const payload = { id: 1, email: 'test@example.com' } as User;
       const tokens = {
         accessToken: 'accessToken',
@@ -109,7 +109,7 @@ describe('AuthService', () => {
 
       jest.spyOn(tokenService, 'generateTokens').mockReturnValue(tokens);
 
-      const result = await authService.refreshToken(payload);
+      const result = authService.refreshToken(payload);
 
       expect(result).toEqual(tokens);
     });

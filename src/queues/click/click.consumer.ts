@@ -42,8 +42,10 @@ export class ClickConsumer {
 
   @OnQueueFailed()
   onFailed(job: Job, error: any) {
-    this.logger.error(
-      `Job ${job.id} in queue ${CLICK_QUEUE} failed with error: ${error.message}`,
-    );
+    if (error instanceof Error) {
+      this.logger.error(
+        `Job ${job.id} in queue ${CLICK_QUEUE} failed with error: ${error.message}`,
+      );
+    }
   }
 }
