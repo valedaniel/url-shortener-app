@@ -137,6 +137,30 @@ Este é um aplicativo de encurtador de URLs desenvolvido com o framework NestJS.
 
 A documentação da API está disponível em `http://localhost:[Porta definida no .env]/docs` quando o servidor está em execução.
 
+## Pontos de melhoria
+
+### Utilizar um balanceador de carga
+
+Usar um Load Balancer (ex: NGINX, AWS ALB) para distribuir tráfego entre instâncias.
+
+### Utilizar um balanceador de carga
+
+Configurar uma CDN para armazenar respostas comuns e melhorar a latência de modo que mantenha o registro dos clicks.
+
+### Monitoramento e alertas
+
+Integrar ferramentas de monitoramento (ex: Prometheus, Grafana) para acompanhar a saúde da aplicação e configurar alertas para eventos críticos.
+
+### Otimização de consultas
+
+Revisar e otimizar consultas ao banco de dados para melhorar o desempenho da aplicação, especialmente em cenários de alta carga.
+
+## Desafios
+
+### Alta carga no banco de dados
+
+Ao escalar horizontalmente podemos ter um gargalo no banco de dados o que pode causar lentidão e instabilidade em momentos de alta demanda.
+
 ## Suporte
 
 Para mais informações, consulte a [documentação do NestJS](https://docs.nestjs.com).
