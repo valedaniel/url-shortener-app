@@ -46,6 +46,8 @@ Este é um aplicativo de encurtador de URLs desenvolvido com o framework NestJS.
 
 2. NODE_ENV deve estar preenchido com o ambiente desejado (ex: local) para que as migrations executem.
 
+3. Verifique se não existe outro service Postgres ou Redis na mesma porta definida no [.env] que possa causar conflitos.
+
 ## Executando o Projeto Localmente
 
 ### Passo a Passo
